@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://chvq2o3jk1yqt"]
+
+[ext_resource type="Texture2D" uid="uid://u4l1l5vv06i1" path="res://assets/tileset.png" id="1_0e48y"]
+[ext_resource type="Script" uid="uid://mqauuxqjxk52" path="res://tile_map.gd" id="2_epypp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hol4"]
+texture = ExtResource("1_0e48y")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_q6r6c"]
+sources/0 = SubResource("TileSetAtlasSource_0hol4")
+
+[node name="Node2D" type="Node2D" unique_id=1263268361]
+
+[node name="TileMap" type="TileMap" parent="." unique_id=1999008929]
+tile_set = SubResource("TileSet_q6r6c")
+format = 2
+layer_0/name = "board"
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 720896, 0, 0, 786432, 0, 0, 851968, 0, 0, 917504, 0, 0, 983040, 0, 0, 1048576, 0, 0, 1114112, 0, 0, 1179648, 0, 0, 1245184, 0, 0, 1, 0, 0, 1245185, 0, 0, 2, 0, 0, 1245186, 0, 0, 3, 0, 0, 1245187, 0, 0, 4, 0, 0, 1245188, 0, 0, 5, 0, 0, 1245189, 0, 0, 6, 0, 0, 1245190, 0, 0, 7, 0, 0, 1245191, 0, 0, 8, 0, 0, 1245192, 0, 0, 9, 0, 0, 1245193, 0, 0, 10, 0, 0, 1245194, 0, 0, 11, 0, 0, 65547, 0, 0, 131083, 0, 0, 196619, 0, 0, 262155, 0, 0, 327691, 0, 0, 393227, 0, 0, 458763, 0, 0, 524299, 0, 0, 589835, 0, 0, 655371, 0, 0, 720907, 0, 0, 786443, 0, 0, 851979, 0, 0, 917515, 0, 0, 983051, 0, 0, 1048587, 0, 0, 1114123, 0, 0, 1179659, 0, 0, 1245195, 0, 0)
+layer_1/name = "active"
+script = ExtResource("2_epypp")
