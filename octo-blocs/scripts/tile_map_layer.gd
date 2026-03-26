@@ -40,7 +40,7 @@ var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
-var tetrominoes := [i, t, o, z, s, l, j, i, t, o, z, s, l, j, i, t, o, z, s, l, j, ]
+var tetrominoes := [i, t, o, z, s, l, j, i, t, o, z, s, l, j, i, t, o, z, s, l, j]
 var tetrominoes_full := tetrominoes.duplicate()
 
 #colors
@@ -59,7 +59,6 @@ var piece_type
 var next_piece_type
 var rotation_index : int = 0
 var active_piece : Array
-var max := 21
 
 #tilemap variables
 var tile_id : int = 0
@@ -71,13 +70,13 @@ func _ready():
 	new_game()
 
 func new_game():
-	
 	tetrominoes.shuffle()
+	colors.shuffle()
 	piece_type = pick_piece()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	draw_piece(piece_type[0], Vector2i(5,1), Vector2i(1,0))
+	draw_piece(piece_type[0], Vector2i(5,1), colors[0])
 	
 func pick_piece():
 	var piece
