@@ -40,7 +40,7 @@ var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
-var tetrominoes := [i, t, o, z, s, l, j]
+var tetrominoes := [i, t, o, z, s, l, j, i, t, o, z, s, l, j, i, t, o, z, s, l, j, ]
 var tetrominoes_full := tetrominoes.duplicate()
 
 #colors
@@ -48,7 +48,7 @@ var r := Vector2i(1,0)
 var g := Vector2i(2,0)
 var b := Vector2i(3,0)
 
-var colors := [r, g, b]
+var colors := [r, r, r, r, r, r, r, g, g, g, g, g, g, g, b, b, b, b, b, b, b]
 
 #grid variables
 const COLS : int = 10
@@ -59,6 +59,7 @@ var piece_type
 var next_piece_type
 var rotation_index : int = 0
 var active_piece : Array
+var max := 21
 
 #tilemap variables
 var tile_id : int = 0
@@ -70,6 +71,7 @@ func _ready():
 	new_game()
 
 func new_game():
+	
 	tetrominoes.shuffle()
 	piece_type = pick_piece()
 	
@@ -86,7 +88,6 @@ func pick_piece():
 		tetrominoes.push_front(o[0])
 		piece = tetrominoes.pop_front()
 	return piece
-	
 
 func draw_piece(piece, pos, atlas):
 	for i in piece:

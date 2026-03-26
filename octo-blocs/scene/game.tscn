@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://chvq2o3jk1yqt"]
 
 [ext_resource type="Texture2D" uid="uid://ckph4bpel6mw5" path="res://assets/tilemap.png" id="1_5kiuu"]
-[ext_resource type="Script" uid="uid://dxiu2swsmrxlx" path="res://scripts/tile_map_layer.gd" id="2_dbls1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dbls1"]
 texture = ExtResource("1_5kiuu")
@@ -63,6 +62,16 @@ texture = ExtResource("1_5kiuu")
 [sub_resource type="TileSet" id="TileSet_xwcet"]
 sources/0 = SubResource("TileSetAtlasSource_33cqm")
 
+[sub_resource type="GDScript" id="GDScript_5kiuu"]
+script/source = "extends TileMapLayer
+
+class_name tetrominoes
+
+var id
+var piece
+var color
+"
+
 [node name="game" type="Node2D" unique_id=1624152854]
 
 [node name="board" type="TileMapLayer" parent="." unique_id=1778197952]
@@ -71,4 +80,4 @@ tile_set = SubResource("TileSet_33cqm")
 
 [node name="active" type="TileMapLayer" parent="." unique_id=944566080]
 tile_set = SubResource("TileSet_xwcet")
-script = ExtResource("2_dbls1")
+script = SubResource("GDScript_5kiuu")
