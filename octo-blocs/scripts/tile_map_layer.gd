@@ -1,6 +1,6 @@
 extends TileMapLayer
 
-#tetrominoes
+#pieces
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
 var i_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(1, 2), Vector2i(1, 3)]
 var i_180 := [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
@@ -43,6 +43,13 @@ var j := [j_0, j_90, j_180, j_270]
 var tetrominoes := [i, t, o, z, s, l, j]
 var tetrominoes_full := tetrominoes.duplicate()
 
+#colors
+var r := Vector2i(1,0)
+var g := Vector2i(2,0)
+var b := Vector2i(3,0)
+
+var colors := [r, g, b]
+
 #grid variables
 const COLS : int = 10
 const ROWS : int = 18
@@ -60,7 +67,7 @@ var next_piece_atlas : Vector2i
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	new_game()
 
 func new_game():
 	tetrominoes.shuffle()
@@ -68,7 +75,7 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	draw_piece(j[0], Vector2i(5,1), Vector2i(1,0))
+	draw_piece(piece_type[0], Vector2i(5,1), Vector2i(1,0))
 	
 func pick_piece():
 	var piece
@@ -76,9 +83,11 @@ func pick_piece():
 		piece = tetrominoes.pop_front()
 	
 	else:
-		tetrominoes = o[0].push_front()
+		tetrominoes.push_front(o[0])
+		piece = tetrominoes.pop_front()
+	return piece
+	
 
 func draw_piece(piece, pos, atlas):
-	pass
 	for i in piece:
 		set_cell(pos+i, tile_id, atlas)
