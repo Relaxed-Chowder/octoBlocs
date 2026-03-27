@@ -1,6 +1,6 @@
 extends TileMapLayer
 
-#pieces
+#tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
 var i_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(1, 2), Vector2i(1, 3)]
 var i_180 := [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
@@ -40,7 +40,7 @@ var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
-var tetrominoes := [i, t, o, z, s, l, j, i, t, o, z, s, l, j, i, t, o, z, s, l, j]
+var tetrominoes := [i, t, o, z, s, l, j]
 var tetrominoes_full := tetrominoes.duplicate()
 
 #colors
@@ -48,7 +48,7 @@ var r := Vector2i(1,0)
 var g := Vector2i(2,0)
 var b := Vector2i(3,0)
 
-var colors := [r, r, r, r, r, r, r, g, g, g, g, g, g, g, b, b, b, b, b, b, b]
+var colors := [r, g, b]
 
 #grid variables
 const COLS : int = 10
@@ -62,6 +62,7 @@ var active_piece : Array
 
 #tilemap variables
 var tile_id : int = 0
+var game_piece
 var piece_atlas : Vector2i
 var next_piece_atlas : Vector2i
 
@@ -70,6 +71,11 @@ func _ready():
 	new_game()
 
 func new_game():
+	#for i in range(colors.size()):
+		#for j in range(tetrominoes.size()):
+			#game_piece = piece_class.new(tetrominoes, colors)
+			
+			
 	tetrominoes.shuffle()
 	colors.shuffle()
 	piece_type = pick_piece()
