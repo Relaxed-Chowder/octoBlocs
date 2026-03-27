@@ -73,6 +73,7 @@ func new_game():
 	tetrominoes.shuffle()
 	colors.shuffle()
 	piece_type = pick_piece()
+	print(typeof(tetrominoes))
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
