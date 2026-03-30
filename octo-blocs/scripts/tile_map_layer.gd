@@ -58,14 +58,13 @@ const ROWS : int = 18
 #game piece variables
 var count : int
 var piece_deck : Array
-var piece_type
+var piece_type : Array
 var next_piece_type
 var rotation_index : int = 0
 var active_piece : Array
 
 #tilemap variables
 var tile_id : int = 0
-var game_piece
 var piece_atlas : Vector2i
 var next_piece_atlas : Vector2i
 
@@ -76,7 +75,9 @@ func _ready():
 func new_game():
 	for i in range(colors.size()):
 		for j in range(tetrominoes.size()):
-			game_piece = piece_class.new(tetrominoes, colors)
+			var game_piece = piece_class.new()
+			game_piece.type = tetrominoes[j]
+			game_piece.color = colors[i]
 			piece_deck.push_front(game_piece)
 			
 	count = piece_deck.size()
@@ -84,20 +85,23 @@ func new_game():
 	colors.shuffle()
 	piece_type = pick_piece()
 	print(count)
-	print(typeof(tetrominoes))
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	draw_piece(piece_type[0], Vector2i(5,1), colors[0])
+	draw_piece(piece_type[0], Vector2i(5,1), piece_type[1])
 	
 func pick_piece():
-	var piece
-	if not tetrominoes.is_empty():
-		piece = tetrominoes.pop_front()
+	var piece : Array
+	piece.resize(2)
+	if not piece_deck.is_empty():
+		piece[0] = piece_deck[0].type
+		piece[1] = piece_deck[0].color
+		print(piece_deck[0].type)
+		piece_deck.pop_front()
 	
 	else:
-		tetrominoes.push_front(o[0])
-		piece = tetrominoes.pop_front()
+		piece_deck.push_front(piece_class.new(o, g))
+		piece = piece_deck.pop_front()
 	return piece
 
 func draw_piece(piece, pos, atlas):
