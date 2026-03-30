@@ -1,4 +1,5 @@
 extends TileMapLayer
+var piece_class = load("res://scripts/piece_class.gd")
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
@@ -55,6 +56,8 @@ const COLS : int = 10
 const ROWS : int = 18
 
 #game piece variables
+var count : int
+var piece_deck : Array
 var piece_type
 var next_piece_type
 var rotation_index : int = 0
@@ -71,14 +74,16 @@ func _ready():
 	new_game()
 
 func new_game():
-	#for i in range(colors.size()):
-		#for j in range(tetrominoes.size()):
-			#game_piece = piece_class.new(tetrominoes, colors)
+	for i in range(colors.size()):
+		for j in range(tetrominoes.size()):
+			game_piece = piece_class.new(tetrominoes, colors)
+			piece_deck.push_front(game_piece)
 			
-			
+	count = piece_deck.size()
 	tetrominoes.shuffle()
 	colors.shuffle()
 	piece_type = pick_piece()
+	print(count)
 	print(typeof(tetrominoes))
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
