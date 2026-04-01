@@ -54,6 +54,10 @@ var colors := [r, g, b]
 const COLS : int = 10
 const ROWS : int = 18
 
+# movement
+const start_pos := Vector2i(5,1)
+var current_pos : Vector2i
+
 #game piece variables
 var count : int
 var piece_deck : Array
@@ -72,22 +76,17 @@ func _ready():
 	new_game()
 
 func new_game():
-	for i in range(colors.size()):
-		for j in range(tetrominoes.size()):
-			var game_piece = piece_class.new()
-			game_piece.type = tetrominoes[j]
-			game_piece.color = colors[i]
-			piece_deck.push_front(game_piece)
-			
+	deck(tetrominoes, colors)
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
 	piece_deck.shuffle()
 	piece_type = pick_piece()
 	print(count)
+	create_piece()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	draw_piece(piece_type[0], Vector2i(5,1), piece_type[1])
+	pass
 	
 func pick_piece():
 	var piece : Array
@@ -102,6 +101,19 @@ func pick_piece():
 		piece_deck.push_front(piece_class.new(o, g))
 		piece = piece_deck.pop_front()
 	return piece
+
+func deck(tetrominoes, colors):
+	for i in range(colors.size()):
+		for j in range(tetrominoes.size()):
+			var game_piece = piece_class.new()
+			game_piece.type = tetrominoes[j]
+			game_piece.color = colors[i]
+			piece_deck.push_front(game_piece)
+
+func create_piece():
+	current_pos = start_pos
+	active_piece = piece_type[rotation_index]
+	draw_piece(piece_type[0], current_pos, piece_type[1])
 
 func draw_piece(piece, pos, atlas):
 	for i in piece[0]:
