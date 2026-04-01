@@ -42,7 +42,6 @@ var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
 var j := [j_0, j_90, j_180, j_270]
 
 var tetrominoes := [i, t, o, z, s, l, j]
-var tetrominoes_full := tetrominoes.duplicate()
 
 #colors
 var r := Vector2i(1,0)
@@ -80,9 +79,9 @@ func new_game():
 			game_piece.color = colors[i]
 			piece_deck.push_front(game_piece)
 			
+	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
-	tetrominoes.shuffle()
-	colors.shuffle()
+	piece_deck.shuffle()
 	piece_type = pick_piece()
 	print(count)
 	
@@ -105,5 +104,5 @@ func pick_piece():
 	return piece
 
 func draw_piece(piece, pos, atlas):
-	for i in piece:
+	for i in piece[0]:
 		set_cell(pos+i, tile_id, atlas)
