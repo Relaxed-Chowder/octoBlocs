@@ -50,6 +50,12 @@ var b := Vector2i(3,0)
 
 var colors := [r, g, b]
 
+# speed
+var steps : int
+const steps_req := 50
+var speed : float
+var speed_type := [1.0]
+
 #grid variables
 const COLS : int = 10
 const ROWS : int = 18
@@ -76,7 +82,9 @@ func _ready():
 	new_game()
 
 func new_game():
-	deck(tetrominoes, colors)
+	speed = 1.0
+	steps = 0
+	deck(tetrominoes, colors, speed_type)
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
 	piece_deck.shuffle()
@@ -86,7 +94,10 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	pass
+	steps += speed
+	if steps > steps_req:
+		steps = 0
+		move_piece(Vector2i.DOWN)
 	
 func pick_piece():
 	var piece : Array
@@ -102,19 +113,31 @@ func pick_piece():
 		piece = piece_deck.pop_front()
 	return piece
 
-func deck(tetrominoes, colors):
+func deck(tetrominoes, colors, speed_type):
 	for i in range(colors.size()):
 		for j in range(tetrominoes.size()):
 			var game_piece = piece_class.new()
 			game_piece.type = tetrominoes[j]
 			game_piece.color = colors[i]
+			game_piece.weight = speed_type[0]
 			piece_deck.push_front(game_piece)
 
 func create_piece():
 	current_pos = start_pos
 	active_piece = piece_type[rotation_index]
 	draw_piece(piece_type[0], current_pos, piece_type[1])
+	
 
 func draw_piece(piece, pos, atlas):
 	for i in piece[0]:
 		set_cell(pos+i, tile_id, atlas)
+		
+func clear_piece():
+	for i in active_piece[0]:
+		erase_cell(current_pos + i)
+
+func move_piece(dir):
+	clear_piece()
+	current_pos += dir
+	draw_piece(piece_type[0], current_pos, piece_type[1])
+	
