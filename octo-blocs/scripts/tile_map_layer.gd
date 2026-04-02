@@ -155,7 +155,7 @@ func move_piece(dir):
 	
 func can_move(dir):
 	var question = true
-	for i in active_piece:
+	for i in active_piece[0]:
 		if not is_free(i + current_pos + dir):
 			question = false
 	return question
