@@ -51,7 +51,7 @@ var b := Vector2i(3,0)
 var colors := [r, g, b]
 
 # speed
-var steps : int
+var steps : Array
 const steps_req := 50
 var speed : float
 var speed_type := [1.0]
@@ -61,6 +61,7 @@ const COLS : int = 10
 const ROWS : int = 18
 
 # movement
+const directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 const start_pos := Vector2i(5,1)
 var current_pos : Vector2i
 
@@ -83,7 +84,7 @@ func _ready():
 
 func new_game():
 	speed = 1.0
-	steps = 0
+	steps = [0, 0, 0] #left, right, down
 	deck(tetrominoes, colors, speed_type)
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
@@ -94,10 +95,19 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	steps += speed
-	if steps > steps_req:
-		steps = 0
-		move_piece(Vector2i.DOWN)
+	if Input.is_action_pressed("ui_down"):
+		steps[2] += 8
+	elif Input.is_action_pressed("ui_right"):
+		steps[1] += 8
+	elif Input.is_action_pressed("ui_left"):
+		steps[0] += 8
+	
+	steps[2] += speed
+	
+	for i in range(steps.size()):
+		if steps[i] > steps_req:
+			move_piece(directions[i])
+			steps[i] = 0
 	
 func pick_piece():
 	var piece : Array
@@ -123,6 +133,7 @@ func deck(tetrominoes, colors, speed_type):
 			piece_deck.push_front(game_piece)
 
 func create_piece():
+	steps = [0, 0, 0] #left, right, down
 	current_pos = start_pos
 	active_piece = piece_type[rotation_index]
 	draw_piece(piece_type[0], current_pos, piece_type[1])
@@ -137,7 +148,18 @@ func clear_piece():
 		erase_cell(current_pos + i)
 
 func move_piece(dir):
-	clear_piece()
-	current_pos += dir
-	draw_piece(piece_type[0], current_pos, piece_type[1])
+	if can_move(dir):
+		clear_piece()
+		current_pos += dir
+		draw_piece(piece_type[0], current_pos, piece_type[1])
+	
+func can_move(dir):
+	var question = true
+	for i in active_piece:
+		if not is_free(i + current_pos + dir):
+			question = false
+	return question
+	
+func is_free(pos):
+	return get_cell_source_id(pos) == -1
 	
