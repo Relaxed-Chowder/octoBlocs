@@ -89,7 +89,7 @@ func new_game():
 	count = piece_deck.size()
 	piece_deck.shuffle()
 	piece_type = pick_piece()
-	print(count)
+	print(piece_deck)
 	create_piece()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
