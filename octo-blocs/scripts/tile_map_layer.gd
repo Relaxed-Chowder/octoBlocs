@@ -51,7 +51,8 @@ var b := Vector2i(3,0)
 var colors := [r, g, b]
 
 # speed
-var steps : int
+const directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
+var steps : Array
 const steps_req := 50
 var speed : float
 var speed_type := [1.0]
@@ -83,7 +84,7 @@ func _ready():
 
 func new_game():
 	speed = 1.0
-	steps = 0
+	steps = [0,0,0] #0: left, 1: right, 2: down
 	deck(tetrominoes, colors, speed_type)
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
@@ -94,10 +95,21 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	steps += speed
-	if steps > steps_req:
-		steps = 0
-		move_piece(Vector2i.DOWN)
+	if Input.is_action_pressed("ui_down"):
+		steps[2] += 6
+		
+	if Input.is_action_pressed("ui_left"):
+		steps[0] += 6
+		
+	if Input.is_action_pressed("ui_right"):
+		steps[1] += 6
+		
+	steps[2] += speed
+	
+	for i in range(steps.size()):
+		if steps[i] > steps_req:
+			steps[i] = 0
+			move_piece(directions[i])
 	
 func pick_piece():
 	var piece : Array
@@ -123,21 +135,33 @@ func deck(tetrominoes, colors, speed_type):
 			piece_deck.push_front(game_piece)
 
 func create_piece():
+	steps = [0,0,0] #0: left, 1: right, 2: down
 	current_pos = start_pos
-	active_piece = piece_type[rotation_index]
-	draw_piece(piece_type[0], current_pos, piece_type[1])
+	active_piece = piece_type[0][rotation_index]
+	draw_piece(active_piece, current_pos, piece_type[1])
 	
 
 func draw_piece(piece, pos, atlas):
-	for i in piece[0]:
+	for i in piece:
 		set_cell(pos+i, tile_id, atlas)
 		
 func clear_piece():
-	for i in active_piece[0]:
+	for i in active_piece:
 		erase_cell(current_pos + i)
 
 func move_piece(dir):
-	clear_piece()
-	current_pos += dir
-	draw_piece(piece_type[0], current_pos, piece_type[1])
+	if can_move(dir):
+		clear_piece()
+		current_pos += dir
+		draw_piece(active_piece, current_pos, piece_type[1])
 	
+func can_move(dir):
+	var canMove = true
+	#for i in active_piece:
+		#if not is_free(i+current_pos+dir):
+			#canMove = false
+		
+	return canMove
+
+#func is_free(pos):
+	#return get_cell_source_id(pos) == -1
