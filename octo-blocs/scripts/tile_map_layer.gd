@@ -1,5 +1,6 @@
 extends TileMapLayer
 var piece_class = load("res://scripts/piece_class.gd")
+@onready var board_layer = get_node("board")
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
@@ -157,11 +158,11 @@ func move_piece(dir):
 	
 func can_move(dir):
 	var canMove = true
-	#for i in active_piece:
-		#if not is_free(i+current_pos+dir):
-			#canMove = false
+	for i in active_piece:
+		if not is_free(i+current_pos+dir):
+			canMove = false
 		
 	return canMove
 
-#func is_free(pos):
-	#return get_cell_source_id(pos) == -1
+func is_free(pos):
+	return board_layer.get_cell_source_id(pos) == null
