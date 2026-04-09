@@ -1,13 +1,13 @@
 extends TileMapLayer
 var piece_class = load("res://scripts/piece_class.gd")
-@onready var board_layer = get_node("board")
+@onready var board_layer : TileMapLayer = $/root/game/board
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
 var i_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(1, 2), Vector2i(1, 3)]
 var i_180 := [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
 var i_270 := [Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 2), Vector2i(2, 3)]
-var i := [i_0, i_90, i_180, i_270]
+var I := [i_0, i_90, i_180, i_270]
 
 var t_0 := [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]
 var t_90 := [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(1, 2)]
@@ -40,9 +40,9 @@ var j_0 := [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]
 var j_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)]
 var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
-var j := [j_0, j_90, j_180, j_270]
+var J := [j_0, j_90, j_180, j_270]
 
-var tetrominoes := [i, t, o, z, s, l, j]
+var tetrominoes := [I, t, o, z, s, l, J]
 
 #colors
 var r := Vector2i(1,0)
@@ -81,6 +81,7 @@ var next_piece_atlas : Vector2i
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print(get_children())
 	new_game()
 
 func new_game():
@@ -165,4 +166,4 @@ func can_move(dir):
 	return canMove
 
 func is_free(pos):
-	return board_layer.get_cell_source_id(pos) == null
+	return board_layer.get_cell_tile_data(pos) == null
