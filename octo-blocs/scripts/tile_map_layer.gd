@@ -1,12 +1,13 @@
 extends TileMapLayer
 var piece_class = load("res://scripts/piece_class.gd")
+@onready var board_layer : TileMapLayer = $/root/game/board
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
 var i_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(1, 2), Vector2i(1, 3)]
 var i_180 := [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
 var i_270 := [Vector2i(2, 0), Vector2i(2, 1), Vector2i(2, 2), Vector2i(2, 3)]
-var i := [i_0, i_90, i_180, i_270]
+var I := [i_0, i_90, i_180, i_270]
 
 var t_0 := [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]
 var t_90 := [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(1, 2)]
@@ -39,9 +40,9 @@ var j_0 := [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)]
 var j_90 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)]
 var j_180 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2)]
 var j_270 := [Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 1), Vector2i(1, 2)]
-var j := [j_0, j_90, j_180, j_270]
+var J := [j_0, j_90, j_180, j_270]
 
-var tetrominoes := [i, t, o, z, s, l, j]
+var tetrominoes := [I, t, o, z, s, l, J]
 
 #colors
 var r := Vector2i(1,0)
@@ -51,6 +52,7 @@ var b := Vector2i(3,0)
 var colors := [r, g, b]
 
 # speed
+const directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 var steps : Array
 const steps_req := 50
 var speed : float
@@ -61,7 +63,6 @@ const COLS : int = 10
 const ROWS : int = 18
 
 # movement
-const directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 const start_pos := Vector2i(5,1)
 var current_pos : Vector2i
 
@@ -80,34 +81,37 @@ var next_piece_atlas : Vector2i
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print(get_children())
 	new_game()
 
 func new_game():
 	speed = 1.0
-	steps = [0, 0, 0] #left, right, down
+	steps = [0,0,0] #0: left, 1: right, 2: down
 	deck(tetrominoes, colors, speed_type)
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
 	piece_deck.shuffle()
 	piece_type = pick_piece()
-	print(count)
+	print(piece_deck)
 	create_piece()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
 	if Input.is_action_pressed("ui_down"):
-		steps[2] += 8
-	elif Input.is_action_pressed("ui_right"):
-		steps[1] += 8
-	elif Input.is_action_pressed("ui_left"):
-		steps[0] += 8
-	
+		steps[2] += 6
+		
+	if Input.is_action_pressed("ui_left"):
+		steps[0] += 6
+		
+	if Input.is_action_pressed("ui_right"):
+		steps[1] += 6
+		
 	steps[2] += speed
 	
 	for i in range(steps.size()):
 		if steps[i] > steps_req:
-			move_piece(directions[i])
 			steps[i] = 0
+			move_piece(directions[i])
 	
 func pick_piece():
 	var piece : Array
@@ -133,33 +137,33 @@ func deck(tetrominoes, colors, speed_type):
 			piece_deck.push_front(game_piece)
 
 func create_piece():
-	steps = [0, 0, 0] #left, right, down
+	steps = [0,0,0] #0: left, 1: right, 2: down
 	current_pos = start_pos
-	active_piece = piece_type[rotation_index]
-	draw_piece(piece_type[0], current_pos, piece_type[1])
+	active_piece = piece_type[0][rotation_index]
+	draw_piece(active_piece, current_pos, piece_type[1])
 	
 
 func draw_piece(piece, pos, atlas):
-	for i in piece[0]:
+	for i in piece:
 		set_cell(pos+i, tile_id, atlas)
 		
 func clear_piece():
-	for i in active_piece[0]:
+	for i in active_piece:
 		erase_cell(current_pos + i)
 
 func move_piece(dir):
 	if can_move(dir):
 		clear_piece()
 		current_pos += dir
-		draw_piece(piece_type[0], current_pos, piece_type[1])
+		draw_piece(active_piece, current_pos, piece_type[1])
 	
 func can_move(dir):
-	var question = true
-	for i in active_piece[0]:
-		if not is_free(i + current_pos + dir):
-			question = false
-	return question
-	
+	var canMove = true
+	for i in active_piece:
+		if not is_free(i+current_pos+dir):
+			canMove = false
+		
+	return canMove
+
 func is_free(pos):
-	return get_cell_source_id(pos) == -1
-	
+	return board_layer.get_cell_tile_data(pos) == null
