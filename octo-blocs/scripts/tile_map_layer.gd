@@ -97,6 +97,9 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
+	if Input.is_action_pressed("r"):
+		rotate_piece()
+		
 	if Input.is_action_pressed("ui_down"):
 		steps[2] += 6
 		
@@ -150,6 +153,12 @@ func draw_piece(piece, pos, atlas):
 func clear_piece():
 	for i in active_piece:
 		erase_cell(current_pos + i)
+
+func rotate_piece():
+	clear_piece()
+	rotation_index = (rotation_index + 1) % piece_type[0].size()
+	active_piece = piece_type[0][rotation_index]
+	draw_piece(active_piece, current_pos, piece_type[1])
 
 func move_piece(dir):
 	if can_move(dir):
