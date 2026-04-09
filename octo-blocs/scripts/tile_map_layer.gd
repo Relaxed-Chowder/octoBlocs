@@ -63,6 +63,7 @@ const COLS : int = 10
 const ROWS : int = 18
 
 # movement
+var rotate_cooldown := 0.5
 const start_pos := Vector2i(5,1)
 var current_pos : Vector2i
 
@@ -97,7 +98,9 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	if Input.is_action_pressed("r"):
+	if Input.is_physical_key_pressed(KEY_R) and rotate_cooldown:
+		rotate_cooldown = false
+		$Timer.start()
 		rotate_piece()
 		
 	if Input.is_action_pressed("ui_down"):
@@ -155,10 +158,21 @@ func clear_piece():
 		erase_cell(current_pos + i)
 
 func rotate_piece():
-	clear_piece()
-	rotation_index = (rotation_index + 1) % piece_type[0].size()
-	active_piece = piece_type[0][rotation_index]
-	draw_piece(active_piece, current_pos, piece_type[1])
+	if can_rotate():
+		clear_piece()
+		rotation_index = (rotation_index + 1) % piece_type[0].size()
+		active_piece = piece_type[0][rotation_index]
+		draw_piece(active_piece, current_pos, piece_type[1])
+	
+func can_rotate():
+	var canRotate = true
+	var temp_rotation_index : int = (rotation_index + 1) % piece_type[0].size()
+	var temp_active_piece = piece_type[0][temp_rotation_index]
+	for i in piece_type[0][0]:
+		print(i)
+		if not is_free(i+current_pos):
+			canRotate = false
+	return canRotate
 
 func move_piece(dir):
 	if can_move(dir):
@@ -171,8 +185,10 @@ func can_move(dir):
 	for i in active_piece:
 		if not is_free(i+current_pos+dir):
 			canMove = false
-		
 	return canMove
 
 func is_free(pos):
 	return board_layer.get_cell_tile_data(pos) == null
+
+func _on_timer_timeout() -> void:
+	rotate_cooldown = true

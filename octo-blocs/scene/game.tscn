@@ -80,3 +80,9 @@ tile_set = SubResource("TileSet_33cqm")
 [node name="active" type="TileMapLayer" parent="." unique_id=944566080]
 tile_set = SubResource("TileSet_xwcet")
 script = ExtResource("2_dbls1")
+
+[node name="Timer" type="Timer" parent="active" unique_id=912369130]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="active/Timer" to="active" method="_on_timer_timeout"]
