@@ -1,4 +1,57 @@
 [gd_scene format=3 uid="uid://6a5mhv5w3rn4"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfiai"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 0.8156863, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3k51"]
+bg_color = Color(0, 0, 0.8784314, 1)
+
 [node name="HUD" type="CanvasLayer" unique_id=770064846]
 layer = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=731499151]
+offset_left = 236.0
+offset_top = 56.0
+offset_right = 387.0
+offset_bottom = 166.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dfiai")
+
+[node name="Label" type="Label" parent="." unique_id=1169427810]
+offset_left = 198.0
+offset_top = 34.0
+offset_right = 430.0
+offset_bottom = 58.0
+text = "Next Piece:"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=2146368084]
+offset_left = 237.0
+offset_top = 174.0
+offset_right = 387.0
+offset_bottom = 198.0
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="." unique_id=1995221707]
+offset_left = -12.0
+offset_top = 118.0
+offset_right = 226.0
+offset_bottom = 198.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=1244241403]
+offset_left = 243.0
+offset_top = 216.0
+offset_right = 383.0
+offset_bottom = 256.0
+theme_override_styles/hover = SubResource("StyleBoxFlat_s3k51")
+text = "NEW GAME"

@@ -1,6 +1,7 @@
 extends TileMapLayer
 var piece_class = load("res://scripts/piece_class.gd")
 @onready var board_layer : TileMapLayer = $/root/game/board
+@onready var node = $/root/game/active
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
@@ -82,10 +83,10 @@ var next_piece_atlas : Vector2i
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print(get_children())
 	new_game()
 
 func new_game():
+	get_node("/root/game/HUD/GameOverLabel").hide()
 	speed = 1.0
 	steps = [0,0,0] #0: left, 1: right, 2: down
 	deck(tetrominoes, colors, speed_type)
@@ -93,6 +94,8 @@ func new_game():
 	count = piece_deck.size()
 	piece_deck.shuffle()
 	piece_type = pick_piece()
+	
+	next_piece_type = pick_piece()
 	print(piece_deck)
 	create_piece()
 	
@@ -147,6 +150,10 @@ func create_piece():
 	current_pos = start_pos
 	active_piece = piece_type[0][rotation_index]
 	draw_piece(active_piece, current_pos, piece_type[1])
+	
+	#next piece
+	draw_piece(next_piece_type[0][0], Vector2i(18,6), next_piece_type[1])
+	
 	
 
 func draw_piece(piece, pos, atlas):

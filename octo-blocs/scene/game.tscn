@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ckph4bpel6mw5" path="res://assets/tilemap.png" id="1_5kiuu"]
 [ext_resource type="Script" uid="uid://dxiu2swsmrxlx" path="res://scripts/tile_map_layer.gd" id="2_dbls1"]
+[ext_resource type="PackedScene" uid="uid://6a5mhv5w3rn4" path="res://scene/hud.tscn" id="3_33cqm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dbls1"]
 texture = ExtResource("1_5kiuu")
@@ -84,5 +85,7 @@ script = ExtResource("2_dbls1")
 [node name="Timer" type="Timer" parent="active" unique_id=912369130]
 wait_time = 0.5
 one_shot = true
+
+[node name="HUD" parent="." unique_id=770064846 instance=ExtResource("3_33cqm")]
 
 [connection signal="timeout" from="active/Timer" to="active" method="_on_timer_timeout"]
