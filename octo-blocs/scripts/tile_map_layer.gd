@@ -17,7 +17,10 @@ var t_270 := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(2, 1), Vector2i(1, 2)]
 var t := [t_0, t_90, t_180, t_270]
 
 var o_0 := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
-var o := [o_0]
+var o_1 := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
+var o_2 := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
+var o_3 := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
+var o := [o_0, o_1, o_2, o_3]
 
 var z_0 := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(1, 1), Vector2i(2, 1)]
 var z_90 := [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 2)]
@@ -49,6 +52,7 @@ var tetrominoes := [I, t, o, z, s, l, J]
 var r := Vector2i(1,0)
 var g := Vector2i(2,0)
 var b := Vector2i(3,0)
+var k := Vector2i(1,2)
 
 var colors := [r, g, b]
 
@@ -75,6 +79,7 @@ var piece_type : Array
 var next_piece_type
 var rotation_index : int = 0
 var active_piece : Array
+var game_end_count : int = 0
 
 #tilemap variables
 var tile_id : int = 0
@@ -107,13 +112,13 @@ func _process(delta: float):
 		rotate_piece()
 		
 	if Input.is_action_pressed("ui_down"):
-		steps[2] += 6
+		steps[2] += 8
 		
 	if Input.is_action_pressed("ui_left"):
-		steps[0] += 6
+		steps[0] += 8
 		
 	if Input.is_action_pressed("ui_right"):
-		steps[1] += 6
+		steps[1] += 8
 		
 	steps[2] += speed
 	
@@ -132,8 +137,11 @@ func pick_piece():
 		piece_deck.pop_front()
 	
 	else:
-		piece_deck.push_front(piece_class.new(o, g))
-		piece = piece_deck.pop_front()
+		game_end_count += 1
+		if(game_end_count > 1):
+			get_node("/root/game/HUD/GameOverLabel").show()
+		piece[0] = o
+		piece[1] = k
 	return piece
 
 func deck(tetrominoes, colors, speed_type):
@@ -167,7 +175,7 @@ func clear_piece():
 func rotate_piece():
 	if can_rotate():
 		clear_piece()
-		rotation_index = (rotation_index + 1) % piece_type[0].size()
+		rotation_index = (rotation_index + 1) % 4
 		active_piece = piece_type[0][rotation_index]
 		draw_piece(active_piece, current_pos, piece_type[1])
 	
@@ -186,6 +194,15 @@ func move_piece(dir):
 		clear_piece()
 		current_pos += dir
 		draw_piece(active_piece, current_pos, piece_type[1])
+		
+	else:
+		if dir == Vector2i.DOWN:
+			ground_piece()
+			piece_type[0] = next_piece_type[0]
+			piece_type[1] = next_piece_type[1]
+			next_piece_type = pick_piece()
+			create_piece()
+			
 	
 func can_move(dir):
 	var canMove = true
@@ -199,3 +216,15 @@ func is_free(pos):
 
 func _on_timer_timeout() -> void:
 	rotate_cooldown = true
+	
+func ground_piece():
+	print("active_piece ", active_piece)
+	for i in active_piece:
+		erase_cell(current_pos + i)
+		board_layer.set_cell(current_pos+i, tile_id, piece_type[1])
+	clear_next()
+		
+func clear_next():
+	for i in range(14,24):
+		for j in range(3,10):
+			erase_cell(Vector2i(i,j))
