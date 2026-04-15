@@ -82,10 +82,14 @@ tile_set = SubResource("TileSet_33cqm")
 tile_set = SubResource("TileSet_xwcet")
 script = ExtResource("2_dbls1")
 
-[node name="Timer" type="Timer" parent="active" unique_id=912369130]
+[node name="rotateTimer" type="Timer" parent="active" unique_id=912369130]
 wait_time = 0.5
+one_shot = true
+
+[node name="moveTimer" type="Timer" parent="active" unique_id=1768308139]
+wait_time = 0.2
 one_shot = true
 
 [node name="HUD" parent="." unique_id=770064846 instance=ExtResource("3_33cqm")]
 
-[connection signal="timeout" from="active/Timer" to="active" method="_on_timer_timeout"]
+[connection signal="timeout" from="active/rotateTimer" to="active" method="_on_timer_timeout"]

@@ -258,7 +258,3 @@ func shift_rows(row):
 			else:
 				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
 		
-
-
-func _on_move_timer_timeout() -> void:
-	pass # Replace with function body.
