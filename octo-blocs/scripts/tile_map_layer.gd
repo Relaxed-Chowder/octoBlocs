@@ -182,8 +182,7 @@ func rotate_piece():
 func can_rotate():
 	var canRotate = true
 	var temp_rotation_index : int = (rotation_index + 1) % piece_type[0].size()
-	var temp_active_piece = piece_type[0][temp_rotation_index]
-	for i in piece_type[0][0]:
+	for i in piece_type[0][temp_rotation_index]:
 		print(i)
 		if not is_free(i+current_pos):
 			canRotate = false
@@ -198,6 +197,7 @@ func move_piece(dir):
 	else:
 		if dir == Vector2i.DOWN:
 			ground_piece()
+			check_rows()
 			piece_type[0] = next_piece_type[0]
 			piece_type[1] = next_piece_type[1]
 			next_piece_type = pick_piece()
@@ -228,3 +228,26 @@ func clear_next():
 	for i in range(14,24):
 		for j in range(3,10):
 			erase_cell(Vector2i(i,j))
+			
+func check_rows():
+	var row : int = ROWS
+	while row > 0:
+		var count = 0
+		for i in range(COLS):
+			if not is_free(Vector2i(i + 1, row)):
+				count += 1
+		if count == COLS:
+			shift_rows(row)
+		else:
+			row -= 1
+				
+func shift_rows(row):
+	var atlas
+	for i in range(row, 1, -1):
+		for j in range(COLS):
+			atlas = board_layer.get_cell_atlas_coords(Vector2i(j+1, i-1))
+			if atlas == Vector2i(-1, -1):
+				board_layer.erase_cell(Vector2i(j+1, i))
+			else:
+				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
+		
