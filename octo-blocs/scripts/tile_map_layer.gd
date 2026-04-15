@@ -56,7 +56,7 @@ var k := Vector2i(1,2)
 
 var colors := [r, g, b]
 
-# speed
+#speed
 const directions := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 var steps : Array
 const steps_req := 50
@@ -67,7 +67,11 @@ var speed_type := [1.0]
 const COLS : int = 10
 const ROWS : int = 18
 
-# movement
+#score
+var score : float
+var points : int = 0
+
+#movement
 var rotate_cooldown := 0.5
 const start_pos := Vector2i(5,1)
 var current_pos : Vector2i
@@ -217,6 +221,8 @@ func is_free(pos):
 func _on_timer_timeout() -> void:
 	rotate_cooldown = true
 	
+
+	
 func ground_piece():
 	print("active_piece ", active_piece)
 	for i in active_piece:
@@ -236,6 +242,7 @@ func check_rows():
 		for i in range(COLS):
 			if not is_free(Vector2i(i + 1, row)):
 				count += 1
+				
 		if count == COLS:
 			shift_rows(row)
 		else:
@@ -251,3 +258,7 @@ func shift_rows(row):
 			else:
 				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
 		
+
+
+func _on_move_timer_timeout() -> void:
+	pass # Replace with function body.
