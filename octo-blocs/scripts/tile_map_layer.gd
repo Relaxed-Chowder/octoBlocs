@@ -185,7 +185,6 @@ func can_rotate():
 	var canRotate = true
 	var temp_rotation_index : int = (rotation_index + 1) % piece_type[0].size()
 	for i in piece_type[0][temp_rotation_index]:
-		print(i)
 		if not is_free(i+current_pos):
 			canRotate = false
 			
@@ -241,15 +240,34 @@ func check_rows():
 		for i in range(COLS):
 			if not is_free(Vector2i(i + 1, row)):
 				count += 1
-				if board_layer.get_cell_atlas_coords(Vector2i(i + 1, row)):
+				if board_layer.get_cell_atlas_coords(Vector2i((i + 1)%COLS, row)) == board_layer.get_cell_atlas_coords(Vector2i(i + 2, row)):
 					color_count += 1
-				
+			else:
+				row -= 1
+		
+		# double line same color
+		if count == COLS*2 and color_count == COLS*2:
+			shift_rows(row)
+			score += 200*floor(speed)
+			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
+			speed += accelerate
+			print("double line same color")
+			
+		# double line
+		elif count == COLS*2:
+			shift_rows(row)
+			score += 100*floor(speed)
+			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
+			speed += accelerate
+			print("double line")
+			
 		# sigle line same color
-		if count == COLS and color_count == COLS:
+		elif count == COLS and color_count == COLS:
 			shift_rows(row)
 			score += 80*floor(speed)
 			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
 			speed += accelerate
+			print("sigle line same color")
 			
 		# sigle line
 		elif count == COLS:
@@ -257,9 +275,8 @@ func check_rows():
 			score += 40*floor(speed)
 			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
 			speed += accelerate
+			print("sigle line")
 			
-		else:
-			row -= 1
 				
 func shift_rows(row):
 	var atlas
