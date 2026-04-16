@@ -62,6 +62,7 @@ var steps : Array
 const steps_req := 50
 var speed : float
 var speed_type := [1.0]
+var accelerate := 0.25
 
 #grid variables
 const COLS : int = 10
@@ -99,6 +100,7 @@ func new_game():
 	speed = 1.0
 	steps = [0,0,0] #0: left, 1: right, 2: down
 	deck(tetrominoes, colors, speed_type)
+	print(piece_deck.size())
 	var piece_full := piece_deck.duplicate()
 	count = piece_deck.size()
 	piece_deck.shuffle()
@@ -112,15 +114,13 @@ func new_game():
 func _process(delta: float):
 	if Input.is_physical_key_pressed(KEY_R) and rotate_cooldown:
 		rotate_cooldown = false
-		$Timer.start()
+		$rotateTimer.start()
 		rotate_piece()
 		
 	if Input.is_action_pressed("ui_down"):
 		steps[2] += 8
-		
 	if Input.is_action_pressed("ui_left"):
 		steps[0] += 8
-		
 	if Input.is_action_pressed("ui_right"):
 		steps[1] += 8
 		
@@ -166,8 +166,6 @@ func create_piece():
 	#next piece
 	draw_piece(next_piece_type[0][0], Vector2i(18,6), next_piece_type[1])
 	
-	
-
 func draw_piece(piece, pos, atlas):
 	for i in piece:
 		set_cell(pos+i, tile_id, atlas)
@@ -190,6 +188,7 @@ func can_rotate():
 		print(i)
 		if not is_free(i+current_pos):
 			canRotate = false
+			
 	return canRotate
 
 func move_piece(dir):
@@ -206,6 +205,7 @@ func move_piece(dir):
 			piece_type[1] = next_piece_type[1]
 			next_piece_type = pick_piece()
 			create_piece()
+			steps = [0,0,0]
 			
 	
 func can_move(dir):
@@ -220,8 +220,6 @@ func is_free(pos):
 
 func _on_timer_timeout() -> void:
 	rotate_cooldown = true
-	
-
 	
 func ground_piece():
 	print("active_piece ", active_piece)
@@ -239,12 +237,27 @@ func check_rows():
 	var row : int = ROWS
 	while row > 0:
 		var count = 0
+		var color_count = 0
 		for i in range(COLS):
 			if not is_free(Vector2i(i + 1, row)):
 				count += 1
+				if board_layer.get_cell_atlas_coords(Vector2i(i + 1, row)):
+					color_count += 1
 				
-		if count == COLS:
+		# sigle line same color
+		if count == COLS and color_count == COLS:
 			shift_rows(row)
+			score += 80*floor(speed)
+			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
+			speed += accelerate
+			
+		# sigle line
+		elif count == COLS:
+			shift_rows(row)
+			score += 40*floor(speed)
+			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
+			speed += accelerate
+			
 		else:
 			row -= 1
 				
