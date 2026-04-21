@@ -2,6 +2,7 @@ extends TileMapLayer
 var piece_class = load("res://scripts/piece_class.gd")
 @onready var board_layer : TileMapLayer = $/root/game/board
 @onready var node = $/root/game/active
+@onready var score_sound = $scoreSound
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
@@ -71,6 +72,13 @@ const ROWS : int = 18
 #score
 var score : float
 var points : int = 0
+var point_reward : Array = [
+	[40, 100, 300, 1200], 
+	[80, 200, 600, 2400], 
+	[null, 300, 900, 3600], 
+	[null, null, 1200, 4800], 
+	[null, null, null, 6000]
+]
 
 #movement
 var rotate_cooldown := 0.5
@@ -85,6 +93,7 @@ var next_piece_type
 var rotation_index : int = 0
 var active_piece : Array
 var game_end_count : int = 0
+var game_over := false
 
 #tilemap variables
 var tile_id : int = 0
@@ -144,6 +153,7 @@ func pick_piece():
 		game_end_count += 1
 		if(game_end_count > 1):
 			get_node("/root/game/HUD/GameOverLabel").show()
+			game_over = true
 		piece[0] = o
 		piece[1] = k
 	return piece
@@ -234,6 +244,9 @@ func clear_next():
 			
 func check_rows():
 	var row : int = ROWS
+	var lc := 0
+	var scc := 0
+	var color_storing : Array
 	while row > 0:
 		var count = 0
 		var color_count = 0
@@ -245,38 +258,22 @@ func check_rows():
 			else:
 				row -= 1
 		
-		# double line same color
-		if count == COLS*2 and color_count == COLS*2:
+		# same color
+		if count == COLS and color_count == COLS:
+			scc += 1
 			shift_rows(row)
-			score += 200*floor(speed)
-			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
-			speed += accelerate
-			print("double line same color")
 			
-		# double line
-		elif count == COLS*2:
-			shift_rows(row)
-			score += 100*floor(speed)
-			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
-			speed += accelerate
-			print("double line")
-			
-		# sigle line same color
-		elif count == COLS and color_count == COLS:
-			shift_rows(row)
-			score += 80*floor(speed)
-			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
-			speed += accelerate
-			print("sigle line same color")
-			
-		# sigle line
+		# lines
 		elif count == COLS:
+			lc += 1
 			shift_rows(row)
-			score += 40*floor(speed)
-			get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
-			speed += accelerate
-			print("sigle line")
-			
+		
+	if (lc > 0 or scc > 0) and !game_over:
+		score += point_reward[scc][lc]*floor(speed)
+		get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
+		speed += accelerate
+		print("line: ", lc, " color: ", scc)
+		score_sound.play()
 				
 func shift_rows(row):
 	var atlas
