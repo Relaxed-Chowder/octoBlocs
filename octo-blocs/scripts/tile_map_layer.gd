@@ -88,6 +88,7 @@ var current_pos : Vector2i
 #game piece variables
 var count : int
 var piece_deck : Array
+var piece_full : Array
 var piece_type : Array
 var next_piece_type
 var rotation_index : int = 0
@@ -110,7 +111,7 @@ func new_game():
 	steps = [0,0,0] #0: left, 1: right, 2: down
 	deck(tetrominoes, colors, speed_type)
 	print(piece_deck.size())
-	var piece_full := piece_deck.duplicate()
+	piece_full = piece_deck.duplicate()
 	count = piece_deck.size()
 	piece_deck.shuffle()
 	piece_type = pick_piece()
@@ -269,7 +270,10 @@ func check_rows():
 			shift_rows(row)
 		
 	if (lc > 0 or scc > 0) and !game_over:
-		score += point_reward[scc][lc]*floor(speed)
+		var tempscc = scc
+		if scc != 0:
+			tempscc= tempscc-1
+		score += point_reward[tempscc][lc-1]*floor(speed)
 		get_node("/root/game/HUD/ScoreLabel").text = "SCORE: " + str(int(score))
 		speed += accelerate
 		print("line: ", lc, " color: ", scc)
@@ -285,3 +289,6 @@ func shift_rows(row):
 			else:
 				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
 		
+#func deck_message():
+	#piece_full
+	#return piece_deck
