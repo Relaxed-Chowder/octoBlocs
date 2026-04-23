@@ -3,6 +3,8 @@ var piece_class = load("res://scripts/piece_class.gd")
 @onready var board_layer : TileMapLayer = $/root/game/board
 @onready var node = $/root/game/active
 @onready var score_sound = $scoreSound
+@onready var connect = $connect
+@onready var noMove = $noMove
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
@@ -155,7 +157,7 @@ func pick_piece():
 		if(game_end_count > 1):
 			get_node("/root/game/HUD/GameOverLabel").show()
 			game_over = true
-		piece[0] = o
+		piece[0] = I
 		piece[1] = k
 	return piece
 
@@ -198,6 +200,7 @@ func can_rotate():
 	for i in piece_type[0][temp_rotation_index]:
 		if not is_free(i+current_pos):
 			canRotate = false
+			noMove.play()
 			
 	return canRotate
 
@@ -237,6 +240,7 @@ func ground_piece():
 		erase_cell(current_pos + i)
 		board_layer.set_cell(current_pos+i, tile_id, piece_type[1])
 	clear_next()
+	connect.play()
 		
 func clear_next():
 	for i in range(14,24):
@@ -289,6 +293,3 @@ func shift_rows(row):
 			else:
 				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
 		
-#func deck_message():
-	#piece_full
-	#return piece_deck

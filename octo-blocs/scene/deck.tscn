@@ -1,17 +1,42 @@
 [gd_scene format=3 uid="uid://cmmwljnri2adp"]
 
 [ext_resource type="Script" uid="uid://daacvy4kohwiu" path="res://scripts/deck.gd" id="1_75a8u"]
+[ext_resource type="Texture2D" uid="uid://ckph4bpel6mw5" path="res://assets/tilemap.png" id="2_q2gmn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75a8u"]
-draw_center = false
-border_color = Color(0.89430577, 0.7914061, 0.52409106, 1)
+bg_color = Color(0.1882353, 0.38431373, 0.1882353, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.54509807, 0.6745098, 0.05882353, 1)
+border_blend = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nifqd"]
+texture = ExtResource("2_q2gmn")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_2emem"]
+sources/0 = SubResource("TileSetAtlasSource_nifqd")
 
 [node name="DECK" type="CanvasLayer" unique_id=221700951]
-script = ExtResource("1_75a8u")
 
-[node name="Panel" type="Panel" parent="." unique_id=1845207259]
-offset_left = 192.0
+[node name="display" type="Panel" parent="." unique_id=1845207259]
+offset_left = 176.0
 offset_top = 108.0
 offset_right = 960.0
 offset_bottom = 540.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_75a8u")
+script = ExtResource("1_75a8u")
+
+[node name="piece_display" type="TileMapLayer" parent="display" unique_id=2123889930]
+tile_set = SubResource("TileSet_2emem")
