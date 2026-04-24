@@ -5,6 +5,7 @@ var piece_class = load("res://scripts/piece_class.gd")
 @onready var score_sound = $scoreSound
 @onready var connect = $connect
 @onready var noMove = $noMove
+@onready var tile_map_layer = "res://scripts/deck.gd"
 
 #tetrominoes
 var i_0 := [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
