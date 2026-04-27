@@ -90,8 +90,6 @@ var current_pos : Vector2i
 
 #game piece variables
 var count : int
-var piece_deck : Array
-var piece_full : Array
 var piece_type : Array
 var next_piece_type
 var rotation_index : int = 0
@@ -112,15 +110,15 @@ func new_game():
 	get_node("/root/game/HUD/GameOverLabel").hide()
 	speed = 1.0
 	steps = [0,0,0] #0: left, 1: right, 2: down
-	deck(tetrominoes, colors, speed_type)
-	print(piece_deck.size())
-	piece_full = piece_deck.duplicate()
-	count = piece_deck.size()
-	piece_deck.shuffle()
+	Global.deck(tetrominoes, colors, speed_type)
+	print(Global.piece_deck.size())
+	Global.piece_full = Global.piece_deck.duplicate()
+	count = Global.piece_deck.size()
+	Global.piece_deck.shuffle()
 	piece_type = pick_piece()
 	
 	next_piece_type = pick_piece()
-	print(piece_deck)
+	print(Global.piece_deck)
 	create_piece()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -147,11 +145,11 @@ func _process(delta: float):
 func pick_piece():
 	var piece : Array
 	piece.resize(2)
-	if not piece_deck.is_empty():
-		piece[0] = piece_deck[0].type
-		piece[1] = piece_deck[0].color
-		print(piece_deck[0].type)
-		piece_deck.pop_front()
+	if not Global.piece_deck.is_empty():
+		piece[0] = Global.piece_deck[0].type
+		piece[1] = Global.piece_deck[0].color
+		print(Global.piece_deck[0].type)
+		Global.piece_deck.pop_front()
 	
 	else:
 		game_end_count += 1
@@ -169,7 +167,7 @@ func deck(tetrominoes, colors, speed_type):
 			game_piece.type = tetrominoes[j]
 			game_piece.color = colors[i]
 			game_piece.weight = speed_type[0]
-			piece_deck.push_front(game_piece)
+			Global.piece_deck.push_front(game_piece)
 
 func create_piece():
 	steps = [0,0,0] #0: left, 1: right, 2: down
