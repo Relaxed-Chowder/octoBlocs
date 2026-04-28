@@ -48,10 +48,10 @@ text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="." unique_id=1244241403]
+[node name="deck" type="Button" parent="." unique_id=1244241403]
 offset_left = 243.0
 offset_top = 216.0
 offset_right = 383.0
 offset_bottom = 256.0
 theme_override_styles/hover = SubResource("StyleBoxFlat_s3k51")
-text = "NEW GAME"
+text = "DECK"

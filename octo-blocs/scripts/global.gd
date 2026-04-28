@@ -1,4 +1,5 @@
 extends Node
+var piece_class = load("res://scripts/piece_class.gd")
 var piece_deck := []
 
 #tetrominoes
