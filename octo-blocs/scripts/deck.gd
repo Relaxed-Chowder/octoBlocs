@@ -43,8 +43,7 @@ func create_piece():
 	var i = 0
 	for j in range(9):
 		for z in range(5):
-			draw_piece(orginized[i].type[0], Vector2i(4+(5*j)%48,4+(5*z)%26), orginized[i].color)
-			i += 1
+			draw_piece(orginized[j+z].type[0], Vector2i(4+(5*j)%48,4+(5*z)%26), orginized[j+z].color)
 		
 func draw_piece(piece, pos, atlas):
 	for i in piece:
