@@ -40,8 +40,11 @@ func orginize():
 			icount -= 1
 			
 func create_piece():
-	for i in range(orginized.size()):
-		draw_piece(orginized[i].type[0], Vector2i((0+(6*i))%48,(0+(8*i))%26), orginized[i].color)
+	var i = 0
+	for j in range(9):
+		for z in range(5):
+			draw_piece(orginized[i].type[0], Vector2i(4+(5*j)%48,4+(5*z)%26), orginized[i].color)
+			i += 1
 		
 func draw_piece(piece, pos, atlas):
 	for i in piece:
