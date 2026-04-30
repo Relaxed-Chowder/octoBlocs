@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://6a5mhv5w3rn4"]
 
-[ext_resource type="Script" uid="uid://pjado3q4oo3k" path="res://scene/deck_button.gd" id="1_o8u2p"]
+[ext_resource type="Script" uid="uid://pjado3q4oo3k" path="res://scripts/deck_button.gd" id="1_o8u2p"]
 [ext_resource type="PackedScene" uid="uid://cmmwljnri2adp" path="res://scene/deck.tscn" id="1_s3k51"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfiai"]
@@ -34,9 +34,9 @@ horizontal_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=2146368084]
 offset_left = 237.0
-offset_top = 174.0
+offset_top = 164.0
 offset_right = 387.0
-offset_bottom = 198.0
+offset_bottom = 188.0
 text = "SCORE: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -53,9 +53,9 @@ vertical_alignment = 1
 
 [node name="deck" type="Button" parent="." unique_id=1244241403]
 offset_left = 243.0
-offset_top = 216.0
+offset_top = 189.0
 offset_right = 383.0
-offset_bottom = 256.0
+offset_bottom = 229.0
 theme_override_styles/hover = SubResource("StyleBoxFlat_s3k51")
 text = "DECK"
 script = ExtResource("1_o8u2p")

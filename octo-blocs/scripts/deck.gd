@@ -45,11 +45,11 @@ func orginize():
 			
 func create_piece():
 	var i = 0
-	for j in range(9):
+	for j in range(7):
 		for z in range(5):
 			i += 1
 			if orginized.size() > i:
-				draw_piece(orginized[i].type[0], Vector2i(2+(5*j),2+(5*z)), orginized[i].color)
+				draw_piece(orginized[i].type[0], Vector2i(7+(5*j),2+(5*z)), orginized[i].color)
 		
 func draw_piece(piece, pos, atlas):
 	for i in piece:
