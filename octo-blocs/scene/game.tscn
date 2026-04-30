@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://6a5mhv5w3rn4" path="res://scene/hud.tscn" id="3_33cqm"]
 [ext_resource type="AudioStream" uid="uid://fh2jkrx0smka" path="res://assets/item_pickup.wav" id="3_xwcet"]
 [ext_resource type="AudioStream" uid="uid://doshg0x8d2ywb" path="res://assets/zipclick.wav" id="4_xlg7c"]
-[ext_resource type="PackedScene" uid="uid://cmmwljnri2adp" path="res://scene/deck.tscn" id="5_p1ry8"]
 [ext_resource type="AudioStream" uid="uid://cmd3qcflb60dj" path="res://assets/error.ogg" id="5_qpk70"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dbls1"]
@@ -105,7 +104,5 @@ volume_db = 10.0
 stream = ExtResource("5_qpk70")
 
 [node name="HUD" parent="." unique_id=770064846 instance=ExtResource("3_33cqm")]
-
-[node name="DECK" parent="." unique_id=221700951 instance=ExtResource("5_p1ry8")]
 
 [connection signal="timeout" from="active/rotateTimer" to="active" method="_on_timer_timeout"]

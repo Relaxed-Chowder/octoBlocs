@@ -1,42 +1,47 @@
 extends Panel
 var piece_class = load("res://scripts/piece_class.gd")
 @onready var piece_dispaly = $piece_display
+@onready var DECK = $".."
 var tile_id : int = 0
-
+var y = 0
 var orginized : Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("click", Global.piece_full.size())
 	orginize() 
-	print("click", orginized.size())
+	for i in range(orginized.size()-1):
+		print("click ", orginized[y].color)
+		y += 1
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	create_piece()
+	if DECK.is_visible():
+		create_piece()
 
 
 func orginize():
 	orginized = Global.piece_full
-	for i in range(1, orginized.size()):
-		var icount = i
-		print("icount", icount)
-		var c1 = Global.colors.find(orginized[icount].color)
-		var p1 = Global.tetrominoes.find(orginized[icount].type)
-		var c2 = Global.colors.find(orginized[icount-1].color)
-		var p2 = Global.tetrominoes.find(orginized[icount-1].type)
-		while icount > 0 and c1 > c2:
-			var temp = orginized[icount-1]
-			orginized[icount-1] = orginized[icount]
-			orginized[icount] = temp
-			icount -= 1
-			
-		while icount > 0 and p1 > p2:
-			var temp = orginized[icount-1]
-			orginized[icount-1] = orginized[icount]
-			orginized[icount] = temp
-			icount -= 1
+	for i in range(orginized.size()):
+		var j = i
+		var c1 = Global.colors.find(orginized[j].color)
+		var p1 = Global.tetrominoes.find(orginized[j].type)
+		var c2 = Global.colors.find(orginized[j-1].color)
+		var p2 = Global.tetrominoes.find(orginized[j-1].type)
+		while j > 0 and c2>c1:
+			c1 = Global.colors.find(orginized[j].color)
+			c2 = Global.colors.find(orginized[j-1].color)
+			var temp = orginized[j-1]
+			orginized[j-1] = orginized[j]
+			orginized[j] = temp
+			j = j-1
+		while j > 0 and p2>p1:
+			p1 = Global.tetrominoes.find(orginized[j].type)
+			p2 = Global.tetrominoes.find(orginized[j-1].type)
+			var temp = orginized[j-1]
+			orginized[j-1] = orginized[j]
+			orginized[j] = temp
+			j = j-1
 			
 func create_piece():
 	var i = 0
@@ -44,7 +49,7 @@ func create_piece():
 		for z in range(5):
 			i += 1
 			if orginized.size() > i:
-				draw_piece(orginized[i].type[0], Vector2i(2+(5*j)%48,2+(5*z)%26), orginized[i].color)
+				draw_piece(orginized[i].type[0], Vector2i(2+(5*j),2+(5*z)), orginized[i].color)
 		
 func draw_piece(piece, pos, atlas):
 	for i in piece:

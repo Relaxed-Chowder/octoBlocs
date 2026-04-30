@@ -60,6 +60,9 @@ var speed : float
 var speed_type := [1.0]
 var piece_full
 
+#menu show
+var deck_visable : bool
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	deck(tetrominoes, colors, speed_type)

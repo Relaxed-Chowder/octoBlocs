@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://6a5mhv5w3rn4"]
 
+[ext_resource type="Script" uid="uid://pjado3q4oo3k" path="res://scene/deck_button.gd" id="1_o8u2p"]
+[ext_resource type="PackedScene" uid="uid://cmmwljnri2adp" path="res://scene/deck.tscn" id="1_s3k51"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfiai"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 5
@@ -55,3 +58,8 @@ offset_right = 383.0
 offset_bottom = 256.0
 theme_override_styles/hover = SubResource("StyleBoxFlat_s3k51")
 text = "DECK"
+script = ExtResource("1_o8u2p")
+
+[node name="DECK" parent="deck" unique_id=221700951 instance=ExtResource("1_s3k51")]
+
+[connection signal="pressed" from="deck" to="deck" method="_on_pressed"]
