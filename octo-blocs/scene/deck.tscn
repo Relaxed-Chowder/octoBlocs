@@ -34,9 +34,28 @@ sources/0 = SubResource("TileSetAtlasSource_nifqd")
 offset_left = 193.0
 offset_top = 234.0
 offset_right = 977.0
-offset_bottom = 646.0
+offset_bottom = 648.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_75a8u")
 script = ExtResource("1_75a8u")
 
 [node name="piece_display" type="TileMapLayer" parent="display" unique_id=2123889930]
 tile_set = SubResource("TileSet_2emem")
+
+[node name="left" type="Button" parent="display" unique_id=508515104]
+layout_mode = 0
+offset_top = 175.0
+offset_right = 64.0
+offset_bottom = 239.0
+text = "left
+"
+
+[node name="right" type="Button" parent="display" unique_id=2026296384]
+layout_mode = 0
+offset_left = 720.0
+offset_top = 175.0
+offset_right = 784.0
+offset_bottom = 239.0
+text = "right"
+
+[connection signal="pressed" from="display/left" to="display" method="_on_left_pressed"]
+[connection signal="pressed" from="display/right" to="display" method="_on_right_pressed"]

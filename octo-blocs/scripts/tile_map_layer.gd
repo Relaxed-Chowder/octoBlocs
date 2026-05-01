@@ -96,6 +96,7 @@ var rotation_index : int = 0
 var active_piece : Array
 var game_end_count : int = 0
 var game_over := false
+var decks = 0
 
 #tilemap variables
 var tile_id : int = 0
@@ -123,6 +124,7 @@ func new_game():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
+	game_end()
 	if Input.is_physical_key_pressed(KEY_R) and rotate_cooldown:
 		rotate_cooldown = false
 		$rotateTimer.start()
@@ -134,7 +136,6 @@ func _process(delta: float):
 		steps[0] += 8
 	if Input.is_action_pressed("ui_right"):
 		steps[1] += 8
-		
 	steps[2] += speed
 	
 	for i in range(steps.size()):
@@ -145,7 +146,7 @@ func _process(delta: float):
 func pick_piece():
 	var piece : Array
 	piece.resize(2)
-	if not Global.piece_deck.is_empty():
+	if not Global.piece_deck.is_empty() and game_end_count <= 0:
 		piece[0] = Global.piece_deck[0].type
 		piece[1] = Global.piece_deck[0].color
 		print(Global.piece_deck[0].type)
@@ -161,13 +162,15 @@ func pick_piece():
 	return piece
 
 func deck(tetrominoes, colors, speed_type):
-	for i in range(colors.size()):
-		for j in range(tetrominoes.size()):
-			var game_piece = piece_class.new()
-			game_piece.type = tetrominoes[j]
-			game_piece.color = colors[i]
-			game_piece.weight = speed_type[0]
-			Global.piece_deck.push_front(game_piece)
+	while decks < 3:
+		for i in range(colors.size()):
+			for j in range(tetrominoes.size()):
+				var game_piece = piece_class.new()
+				game_piece.type = tetrominoes[j]
+				game_piece.color = colors[i]
+				game_piece.weight = speed_type[0]
+				Global.piece_deck.push_front(game_piece)
+		decks += 1
 
 func create_piece():
 	steps = [0,0,0] #0: left, 1: right, 2: down
@@ -257,10 +260,13 @@ func check_rows():
 		for i in range(COLS):
 			if not is_free(Vector2i(i + 1, row)):
 				count += 1
+				if(row == 1):
+					game_end_count += 1
 				if board_layer.get_cell_atlas_coords(Vector2i((i + 1)%COLS, row)) == board_layer.get_cell_atlas_coords(Vector2i(i + 2, row)):
 					color_count += 1
 			else:
 				row -= 1
+			
 		
 		# same color
 		if count == COLS and color_count == COLS:
@@ -292,3 +298,7 @@ func shift_rows(row):
 			else:
 				board_layer.set_cell(Vector2i(j+1, i), tile_id, atlas)
 		
+func game_end():
+	for i in active_piece:
+		if not is_free(i + current_pos):
+			game_end_count += 2

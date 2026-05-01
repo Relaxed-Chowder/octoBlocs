@@ -5,6 +5,7 @@ var piece_class = load("res://scripts/piece_class.gd")
 var tile_id : int = 0
 var y = 0
 var orginized : Array
+var pages = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,9 +45,10 @@ func orginize():
 			j = j-1
 			
 func create_piece():
-	var i = 0
+	var i = 0 + (pages*35)
 	for j in range(7):
 		for z in range(5):
+			i += (pages*35)
 			i += 1
 			if orginized.size() > i:
 				draw_piece(orginized[i].type[0], Vector2i(7+(5*j),2+(5*z)), orginized[i].color)
@@ -55,3 +57,14 @@ func draw_piece(piece, pos, atlas):
 	for i in piece:
 		piece_dispaly.set_cell(pos+i, tile_id, atlas)
 		
+func _on_left_pressed() -> void:
+	if pages > 0:
+		print ("click")
+		pages -= 1
+		create_piece()
+
+func _on_right_pressed() -> void:
+	if pages <= ceil(orginized.size()/35):
+		print ("click")
+		pages += 1
+		create_piece()
