@@ -45,26 +45,32 @@ func orginize():
 			j = j-1
 			
 func create_piece():
-	var i = 0 + (pages*35)
+	var i = pages * 35
 	for j in range(7):
 		for z in range(5):
-			i += (pages*35)
-			i += 1
 			if orginized.size() > i:
 				draw_piece(orginized[i].type[0], Vector2i(7+(5*j),2+(5*z)), orginized[i].color)
+			i += 1
 		
 func draw_piece(piece, pos, atlas):
 	for i in piece:
 		piece_dispaly.set_cell(pos+i, tile_id, atlas)
 		
+func clear_piece():
+	for n in range(48):
+		for z in range(25):
+			piece_dispaly.erase_cell(Vector2i(n, z))
+		
 func _on_left_pressed() -> void:
 	if pages > 0:
 		print ("click")
 		pages -= 1
+		clear_piece()
 		create_piece()
 
 func _on_right_pressed() -> void:
-	if pages <= ceil(orginized.size()/35):
+	if pages < floor(float(orginized.size())/35):
 		print ("click")
 		pages += 1
+		clear_piece()
 		create_piece()

@@ -47,6 +47,8 @@ var J := [j_0, j_90, j_180, j_270]
 
 var tetrominoes := [I, t, o, z, s, l, J]
 
+var decks : int
+
 #colors
 var r := Vector2i(1,0)
 var g := Vector2i(2,0)
@@ -74,10 +76,12 @@ func _process(delta: float) -> void:
 	pass
 
 func deck(tetrominoes, colors, speed_type):
-	for i in range(colors.size()):
-		for j in range(tetrominoes.size()):
-			var game_piece = piece_class.new()
-			game_piece.type = tetrominoes[j]
-			game_piece.color = colors[i]
-			game_piece.weight = speed_type[0]
-			piece_deck.push_front(game_piece)
+	while decks < 3:
+		for i in range(colors.size()):
+			for j in range(tetrominoes.size()):
+				var game_piece = piece_class.new()
+				game_piece.type = tetrominoes[j]
+				game_piece.color = colors[i]
+				game_piece.weight = speed_type[0]
+				Global.piece_deck.push_front(game_piece)
+		decks += 1

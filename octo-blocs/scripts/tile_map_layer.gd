@@ -161,17 +161,6 @@ func pick_piece():
 		piece[1] = k
 	return piece
 
-func deck(tetrominoes, colors, speed_type):
-	while decks < 3:
-		for i in range(colors.size()):
-			for j in range(tetrominoes.size()):
-				var game_piece = piece_class.new()
-				game_piece.type = tetrominoes[j]
-				game_piece.color = colors[i]
-				game_piece.weight = speed_type[0]
-				Global.piece_deck.push_front(game_piece)
-		decks += 1
-
 func create_piece():
 	steps = [0,0,0] #0: left, 1: right, 2: down
 	current_pos = start_pos
