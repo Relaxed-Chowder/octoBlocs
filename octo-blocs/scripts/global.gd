@@ -65,6 +65,9 @@ var piece_full
 #menu show
 var deck_visable : bool
 
+#progression
+var rounds : int = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	deck(tetrominoes, colors, speed_type)
